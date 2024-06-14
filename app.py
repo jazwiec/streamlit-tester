@@ -3,11 +3,25 @@ from pymssql import _mssql
 import pymssql
 import pyodbc
 import requests
-
+import ssl
 st.title('SQL Server Connection Tester')
+st.write("Hosting TLS version (before): " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
 
-st.write("Hosting TLS version: " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
+ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+
+ctx.options |= ssl.OP_NO_SSLv2
+ctx.options |= ssl.OP_NO_SSLv3
+ctx.options |= ssl.OP_NO_TLSv1
+ctx.options |= ssl.OP_NO_TLSv1_1
+
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+st.write("Hosting TLS version (after): " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
+
 st.divider()
+
+
 
 server = st.text_input('Server', "mssql4.webio.pl,2401")
 database = st.text_input('Database', "")
