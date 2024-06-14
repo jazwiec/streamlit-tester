@@ -2,16 +2,26 @@ import streamlit as st
 from pymssql import _mssql
 import pymssql
 import pyodbc
+import requests
 
 st.title('SQL Server Connection Tester')
 
+st.write("Hosting TLS version: " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
+st.divider()
 
-driver = st.text_input('Driver', "DRIVER={SQL Server Native Client 11.0}")
 server = st.text_input('Server', "mssql4.webio.pl,2401")
 database = st.text_input('Database', "")
 username = st.text_input('Username', "")
 password = st.text_input('Password', type='password')
 
+#DRIVER={SQL Server Native Client 11.0}
+driver = st.text_input('Driver', "DRIVER={ODBC Driver 17 for SQL Server}")
+encrypt = st.text_input('Encrypt', "no")
+trustServerCertificate = st.text_input('TrustServerCertificate', "yes")
+TLSVersion = st.text_input('TLSVersion', "1.2")
+options = st.text_input('Options', "")
+
+st.divider()
 
 if st.button('Connect to database by _mssql'):
     try:
@@ -54,12 +64,11 @@ if st.button("Connect to database by pyodbc"):
         st.write('Connecting to database...')
         
         # connection_string = "DRIVER={ODBC Driver 17 for SQL Server};SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
-        connection_string = ""
-        if driver:
-            connection_string = driver + ";SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
-        else:    
-            connection_string = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
-            
+        connection_string = driver + ";SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
+ 
+        if options:
+            connection_string = connection_string + ";" + options
+       
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
 
