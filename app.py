@@ -6,6 +6,7 @@ import pyodbc
 st.title('SQL Server Connection Tester')
 
 
+driver = st.text_input('Driver', "DRIVER={SQL Server Native Client 11.0}")
 server = st.text_input('Server', "mssql4.webio.pl,2401")
 database = st.text_input('Database', "")
 username = st.text_input('Username', "")
@@ -52,7 +53,13 @@ if st.button("Connect to database by pyodbc"):
     try:
         st.write('Connecting to database...')
         
-        connection_string = "DRIVER={ODBC Driver 17 for SQL Server};SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
+        # connection_string = "DRIVER={ODBC Driver 17 for SQL Server};SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
+        connection_string = ""
+        if driver:
+            connection_string = driver + ";SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
+        else:    
+            connection_string = "SERVER=" + server + ";DATABASE=" + database + ";UID=" + username + ";PWD=" + password + ";Encrypt=no;TrustServerCertificate=yes;TLSVersion=1.2"
+            
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
 
