@@ -132,3 +132,15 @@ if st.button("Add data to local database"):
         
     except Exception as e:
         st.write('Error:', e)
+
+
+      
+try:
+    with open("database/main.db", "rb") as file:
+        btn = st.download_button(
+                label="Download db file",
+                data=file,
+                file_name="bkp_main.db"
+            )
+except Exception as e:
+    st.write('Error:', e)
