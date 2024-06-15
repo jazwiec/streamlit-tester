@@ -7,7 +7,7 @@ import ssl
 import database.db_manager as db_manager
 
 
-st.title('SQL Server Connection Tester v2')
+st.title('SQL Server Connection Tester v3')
 st.write("Hosting TLS version (before): " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
 
 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -134,13 +134,16 @@ if st.button("Add data to local database"):
         st.write('Error:', e)
 
 
-      
-try:
-    with open("database/main.db", "rb") as file:
-        btn = st.download_button(
-                label="Download db file",
-                data=file,
-                file_name="bkp_main.db"
-            )
-except Exception as e:
-    st.write('Error:', e)
+db_path = st.text_input('Database path', "")
+if db_path:
+    try:
+        with open(db_path) as file:
+            btn = st.download_button(
+                    label="Download db file",
+                    data=file,
+                    file_name="db_bkp.db"
+                )
+    except Exception as e:
+        st.write('Error:', e)
+else:
+    st.write('Enter database path')
