@@ -19,6 +19,10 @@ def create_database():
     cursor.execute('''INSERT INTO cfg_app_configuration(id, value) 
                    VALUES('PARAM_1', 'VALUE_1')
                    ON CONFLICT(id) DO NOTHING''')
+    
+    cursor.execute('''INSERT INTO cfg_app_configuration(id, value) 
+                   VALUES('PARAM_2', 'VALUE_2')
+                   ON CONFLICT(id) DO NOTHING''')
 
     print('Committing changes')
     db.commit()
