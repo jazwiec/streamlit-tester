@@ -4,7 +4,10 @@ import pymssql
 import pyodbc
 import requests
 import ssl
-st.title('SQL Server Connection Tester')
+import database.db_manager as db_manager
+
+
+st.title('SQL Server Connection Tester v1')
 st.write("Hosting TLS version (before): " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
 
 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -94,5 +97,38 @@ if st.button("Connect to database by pyodbc"):
 
         cursor.close()
         conn.close()
+    except Exception as e:
+        st.write('Error:', e)
+
+
+        
+
+if st.button("Create local database"):
+    try:
+        st.write('Create local database...')
+        data = db_manager.create_database()
+        
+    except Exception as e:
+        st.write('Error:', e)
+
+
+if st.button("Get data from local database"):
+    try:
+        st.write('Connecting to local database...')
+        data = db_manager.get_app_config()
+        st.write('Data')
+        st.write(data)
+        
+    except Exception as e:
+        st.write('Error:', e)
+
+
+id = st.text_input('Id', "")
+value = st.text_input('Value', "")
+
+if st.button("Add data to local database"):
+    try:
+        data = db_manager.add_app_config(id, value)
+        
     except Exception as e:
         st.write('Error:', e)
