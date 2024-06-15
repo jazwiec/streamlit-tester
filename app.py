@@ -137,7 +137,7 @@ if st.button("Add data to local database"):
 db_path = st.text_input('Database path', "")
 if db_path:
     try:
-        with open(db_path) as file:
+        with open(db_path, "rb") as file:
             btn = st.download_button(
                     label="Download db file",
                     data=file,
