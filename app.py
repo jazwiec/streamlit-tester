@@ -7,7 +7,7 @@ import ssl
 import database.db_manager as db_manager
 
 
-st.title('SQL Server Connection Tester v1')
+st.title('SQL Server Connection Tester v2')
 st.write("Hosting TLS version (before): " + requests.get('https://www.howsmyssl.com/a/check', verify=False).json()['tls_version'])
 
 ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
